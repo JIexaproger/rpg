@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 public class FloorGenerator : MonoBehaviour
 {
-    [Header("Префабы комнат")]
+    [Header("РџСЂРµС„Р°Р±С‹ РєРѕРјРЅР°С‚")]
     public GameObject roomStartPrefab;
     public GameObject roomCombatPrefab;
-    public GameObject roomRewardPrefab;      // наградная
-    public GameObject roomShopPrefab;        // магазин
+    public GameObject roomRewardPrefab;      // РЅР°РіСЂР°РґРЅР°СЏ
+    public GameObject roomShopPrefab;        // РјР°РіР°Р·РёРЅ
 
-    [Header("Настройки")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё")]
     public int minRooms = 8;
     public int maxRooms = 12;
     public float roomSize = 16f;
@@ -24,7 +24,7 @@ public class FloorGenerator : MonoBehaviour
 
     void GenerateFloor()
     {
-        // Стартовая комната в центре (0,0)
+        // РЎС‚Р°СЂС‚РѕРІР°СЏ РєРѕРјРЅР°С‚Р° РІ С†РµРЅС‚СЂРµ (0,0)
         SpawnRoom(roomStartPrefab, new Vector2Int(0, 0));
         usedPositions.Add(new Vector2Int(0, 0));
 
@@ -33,22 +33,22 @@ public class FloorGenerator : MonoBehaviour
 
         for (int i = 1; i < roomCount; i++)
         {
-            // Куда идём: вперёд (0,-1), влево (-1,0), вправо (1,0)
-            // Назад не идём (0,1) чтобы не зацикливаться
+            // РљСѓРґР° РёРґС‘Рј: РІРїРµСЂС‘Рґ (0,-1), РІР»РµРІРѕ (-1,0), РІРїСЂР°РІРѕ (1,0)
+            // РќР°Р·Р°Рґ РЅРµ РёРґС‘Рј (0,1) С‡С‚РѕР±С‹ РЅРµ Р·Р°С†РёРєР»РёРІР°С‚СЊСЃСЏ
             List<Vector2Int> directions = new List<Vector2Int>
             {
-                new Vector2Int(0, -1),   // вперёд (вниз по Z)
-                new Vector2Int(-1, 0),   // влево
-                new Vector2Int(1, 0)     // вправо
+                new Vector2Int(0, -1),   // РІРїРµСЂС‘Рґ (РІРЅРёР· РїРѕ Z)
+                new Vector2Int(-1, 0),   // РІР»РµРІРѕ
+                new Vector2Int(1, 0)     // РІРїСЂР°РІРѕ
             };
 
-            // Перемешиваем направления
+            // РџРµСЂРµРјРµС€РёРІР°РµРј РЅР°РїСЂР°РІР»РµРЅРёСЏ
             Shuffle(directions);
 
             Vector2Int nextPos = currentPos;
             bool found = false;
 
-            // Ищем свободное место
+            // РС‰РµРј СЃРІРѕР±РѕРґРЅРѕРµ РјРµСЃС‚Рѕ
             foreach (var dir in directions)
             {
                 Vector2Int testPos = currentPos + dir;
@@ -60,11 +60,11 @@ public class FloorGenerator : MonoBehaviour
                 }
             }
 
-            if (!found) break; // Некуда идти
+            if (!found) break; // РќРµРєСѓРґР° РёРґС‚Рё
 
-            // Выбираем тип комнаты
+            // Р’С‹Р±РёСЂР°РµРј С‚РёРї РєРѕРјРЅР°С‚С‹
             GameObject prefab = roomCombatPrefab;
-            if (i == roomCount - 1) prefab = roomRewardPrefab; // последняя — награда
+            if (i == roomCount - 1) prefab = roomRewardPrefab; // РїРѕСЃР»РµРґРЅСЏСЏ вЂ” РЅР°РіСЂР°РґР°
 
             SpawnRoom(prefab, nextPos);
             usedPositions.Add(nextPos);
